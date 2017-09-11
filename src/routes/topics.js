@@ -1,10 +1,16 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  return res.json({ topics: [] })
-})
+const Topic = require('../models/topics')
 
+router.get('/', (req, res) => {
+  Topic.find({}).then(entries => {
+    return res.json({ topics: entries })
+  }).catch(e => {
+    console.error(e)
+    return res.status(400).send({ error: { msg: 'something went wrong here' } })
+  })
+})
 router.get('/:id', (req, res) => {
   const { id } = req.params
 
