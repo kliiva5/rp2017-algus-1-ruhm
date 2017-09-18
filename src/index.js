@@ -8,7 +8,6 @@ const app = express()
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-mongoose.set('debug', true)
 
 const topics = require('./routes/topics')
 app.use('/api/topics', topics)
@@ -27,6 +26,7 @@ app.use((err, req, res, next) => {
   })
 })
 
+mongoose.set('debug', true)
 mongoose.Promise = global.Promise
 mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true })
 .then(() => {
