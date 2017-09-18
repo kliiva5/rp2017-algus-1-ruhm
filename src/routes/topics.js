@@ -12,60 +12,56 @@ router.get('/', (req, res) => {
   })
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params
 
   if (!id) return res.status(400)
 
-  Topic.findById(id)
-    .then(topic => {
-      return res.json({ topic })
-    })
-    .catch(e => {
-      console.error(e)
-      return res.status(400).send({ error: { msg: 'something went wrong here' } })
-    })
+  try {
+    const topic = await Topic.findById(id)
+    return res.json({ topic })
+  } catch (e) {
+    console.error(e)
+    return res.status(400).send({ error: { msg: 'something went wrong here' } })
+  }
 })
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { name } = req.body
 
-  const newTopic = new Topic({ name })
-  newTopic.save()
-    .then(topic => {
-      return res.status(201).send({ topic })
-    })
-    .catch(e => {
-      console.error(e)
-      return res.status(400).send({ error: { msg: 'something went wrong here' } })
-    })
+  try {
+    const newTopic = new Topic({ name })
+    const topic = await newTopic.save()
+    return res.status(201).send({ topic })
+  } catch (e) {
+    console.error(e)
+    return res.status(400).send({ error: { msg: 'something went wrong here' } })
+  }
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.params
   const { name } = req.body
 
-  Topic.findByIdAndUpdate(id, { name })
-  .then(() => {
+  try {
+    await Topic.findByIdAndUpdate(id, { name })
     return res.status(200).send()
-  })
-  .catch(e => {
+  } catch (e) {
     console.error(e)
     return res.status(400).send({ error: { msg: 'something went wrong here' } })
-  })
+  }
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params
 
-  Topic.findByIdAndUpdate(id, { deleted: new Date() })
-  .then(() => {
+  try {
+    await Topic.findByIdAndUpdate(id, { deleted: new Date() })
     return res.status(200).send()
-  })
-  .catch(e => {
+  } catch (e) {
     console.error(e)
     return res.status(400).send({ error: { msg: 'something went wrong here' } })
-  })
+  }
 })
 
 module.exports = router
