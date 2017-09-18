@@ -28,7 +28,6 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', [
   body('name').exists().withMessage('Name must exist')
-  .isAlphanumeric().withMessage('Name must contain only letters and numbers')
   .isLength({ min: 4 }).withMessage('Name must be at least 4 characters long')
 ], async (req, res) => {
   try {
@@ -46,7 +45,6 @@ router.post('/', [
 
 router.put('/:id', [
   body('name').exists().withMessage('Name must exist')
-  .isAlphanumeric().withMessage('Name must contain only letters and numbers')
   .isLength({ min: 4 }).withMessage('Name must be at least 4 characters long')
 ], async (req, res) => {
   try {
