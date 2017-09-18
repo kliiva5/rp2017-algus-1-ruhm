@@ -34,4 +34,31 @@ router.post('/', (req, res) => {
     })
 })
 
+router.put('/:id', (req, res) => {
+  const { id } = req.params
+  const { name } = req.body
+
+  Topic.findByIdAndUpdate(id, { name })
+  .then(() => {
+    return res.status(200).send()
+  })
+  .catch(e => {
+    console.error(e)
+    return res.status(400).send({ error: { msg: 'something went wrong here' } })
+  })
+})
+
+router.delete('/:id', (req, res) => {
+  const { id } = req.params
+
+  Topic.findByIdAndUpdate(id, { deleted: new Date() })
+  .then(() => {
+    return res.status(200).send()
+  })
+  .catch(e => {
+    console.error(e)
+    return res.status(400).send({ error: { msg: 'something went wrong here' } })
+  })
+})
+
 module.exports = router
