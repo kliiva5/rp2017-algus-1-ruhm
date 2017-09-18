@@ -17,7 +17,14 @@ router.get('/:id', (req, res) => {
 
   if (!id) return res.status(400)
 
-  return res.json({ topics: [] })
+  Topic.findById(id)
+    .then(topic => {
+      return res.json({ topic })
+    })
+    .catch(e => {
+      console.error(e)
+      return res.status(400).send({ error: { msg: 'something went wrong here' } })
+    })
 })
 
 router.post('/', (req, res) => {
