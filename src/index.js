@@ -4,8 +4,10 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 
+const testEnvironment = process.env.NODE_ENV === 'test'
+
 const app = express()
-app.use(morgan('dev'))
+if (!testEnvironment) app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -26,10 +28,11 @@ app.use((err, req, res, next) => {
   })
 })
 
-mongoose.set('debug', true)
+if (!testEnvironment) mongoose.set('debug', true)
 mongoose.Promise = global.Promise
 mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true })
 .then(() => {
+  if (testEnvironment) return // do not start server for test env
   const listener = app.listen(process.env.APP_PORT || 3000, () =>
   console.log('App started in ' +
     process.env.NODE_ENV +
@@ -42,3 +45,5 @@ mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true })
   console.error('Unable to connect to MongoDB')
   process.exit(1)
 })
+
+module.exports = app
