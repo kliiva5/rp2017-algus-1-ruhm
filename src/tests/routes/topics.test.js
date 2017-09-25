@@ -69,4 +69,25 @@ module.exports = (supertest) => {
       })
     })
   })
+
+  describe('/GET:id', () => {
+    it('it should get single topic', done => {
+      supertest
+      .get('/api/topics/' + savedTopic._id)
+      .expect(200, done)
+    })
+  })
+
+  describe('/PUT:id', () => {
+    it('it should update single topic', done => {
+      const update = {
+        name: 'new name'
+      }
+
+      supertest
+      .put('/api/topics/' + savedTopic._id)
+      .send(update)
+      .expect(200, done)
+    })
+  })
 }
