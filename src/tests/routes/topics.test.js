@@ -2,6 +2,8 @@
 const expect = require('chai').expect
 
 module.exports = (supertest) => {
+  let savedTopic
+
   describe('/POST', () => {
     it('it should create new topic', done => {
       const topic = {
@@ -18,6 +20,7 @@ module.exports = (supertest) => {
         if (err) return done(err)
 
         const { topic } = res.body
+        savedTopic = topic
 
         expect(topic).to.be.an('object')
         expect(topic).to.have.property('_id')
@@ -51,7 +54,19 @@ module.exports = (supertest) => {
     it('it should GET all the topics', done => {
       supertest
       .get('/api/topics')
-      .expect(200, done)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err)
+
+        const { topics } = res.body
+
+        expect(topics).to.be.a('array')
+        expect(topics[0]).to.have.property('_id')
+
+        done()
+      })
     })
   })
 }
