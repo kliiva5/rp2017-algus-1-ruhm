@@ -30,7 +30,11 @@ app.use((err, req, res, next) => {
 
 if (!testEnvironment) mongoose.set('debug', true)
 mongoose.Promise = global.Promise
-mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true })
+const mongoDBUri = testEnvironment
+  ? process.env.MONGODB_TEST_URI
+  : process.env.MONGODB_URI
+
+mongoose.connect(mongoDBUri, { useMongoClient: true })
 .then(() => {
   if (testEnvironment) return // do not start server for test env
   const listener = app.listen(process.env.APP_PORT || 3000, () =>
