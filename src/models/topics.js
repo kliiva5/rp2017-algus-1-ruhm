@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 const TopicSchema = new Schema(
   {
     name: { type: String, required: true },
-    viewCount: {type: Number, default: 0},
+    curriculum: { type: mongoose.Schema.Types.ObjectId, ref: 'Curriculum' },
+    viewCount: { type: Number, default: 0 },
     deleted: { type: Date }
   },
   {

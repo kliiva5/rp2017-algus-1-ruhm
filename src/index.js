@@ -14,6 +14,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 const topics = require('./routes/topics')
 app.use('/api/topics', topics)
 
+const curriculums = require('./routes/curriculums')
+app.use('/api/curriculums', curriculums)
+
 // 404
 app.use((req, res, next) => {
   const err = new Error('Resource not found')

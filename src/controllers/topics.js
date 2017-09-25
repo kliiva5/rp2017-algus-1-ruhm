@@ -8,13 +8,15 @@ module.exports.getTopics = async (req, res) => {
 module.exports.getTopic = async (req, res) => {
   const { id } = req.params
   if (!id) return res.status(400)
-  const topic = await Topic.findById(id)
+  const topic = await Topic
+    .findById(id)
+    .populate('curriculum', 'curriculum manager -_id')
   return res.json({ topic })
 }
 
 module.exports.postTopic = async (req, res) => {
-  const { name } = req.body
-  const newTopic = new Topic({ name })
+  const { name, curriculum } = req.body
+  const newTopic = new Topic({ name, curriculum })
   const topic = await newTopic.save()
   return res.status(201).send({ topic })
 }

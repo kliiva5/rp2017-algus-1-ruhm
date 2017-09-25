@@ -13,3 +13,8 @@ module.exports.topic = [
   .isLength({ min: 4 }).withMessage('Name must be at least 4 characters long'),
   errorCheck
 ]
+
+module.exports.curriculum = [
+  body(['curriculum', 'manager']).exists().withMessage('Curriculum and manager must exist'),
+  errorCheck
+]
