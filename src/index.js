@@ -20,6 +20,9 @@ app.use('/api/curriculums', curriculums)
 const auth = require('./routes/auth')
 app.use('/api/auth', auth)
 
+const users = require('./routes/users')
+app.use('/api/users', users)
+
 // 404
 app.use((req, res, next) => {
   const err = new Error('Resource not found')
